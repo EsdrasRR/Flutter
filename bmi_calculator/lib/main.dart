@@ -66,6 +66,7 @@ class _HomeState extends State<Home> {
       body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
         child: Form(
+          key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -119,7 +120,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
               Text(
-                "$_infoText",
+                _infoText,
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.blueGrey, fontSize: 25.0),
               )

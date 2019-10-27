@@ -1,16 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:async/async.dart';
+import 'dart:async';
 import 'dart:convert';
 
 const request = "https://api.hgbrasil.com/finance?format=json&key=41df91f0";
 
-void main() async{
+void main() async {
+  runApp(
+    MaterialApp(
+      home: Home(),
+    ),
+  );
+}
 
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text("\$ Converter \$"),
+        backgroundColor: Colors.amber,
+        centerTitle: true,
+      ),
+      body: ,
+    );
+  }
+}
+
+Future<Map> getData() async {
   http.Response response = await http.get(request);
-  json.decode(response.body);
-
-  runApp(MaterialApp(
-    home: Container()
-  ));
+  return json.decode(response.body);
 }

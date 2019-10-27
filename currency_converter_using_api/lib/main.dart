@@ -22,9 +22,13 @@ class _HomeState extends State<Home> {
   final realController = TextEditingController();
   final dollarController = TextEditingController();
   final euroController = TextEditingController();
+  final poundController = TextEditingController();
+  final pesoController = TextEditingController();
 
   double dollar;
   double euro;
+  double pound;
+  double peso;
 
   void _clearAll() {
     realController.text = "";
@@ -40,6 +44,9 @@ class _HomeState extends State<Home> {
     double real = double.parse(text);
     dollarController.text = (real / dollar).toStringAsFixed(2);
     euroController.text = (real / euro).toStringAsFixed(2);
+    poundController.text = (real / pound).toStringAsFixed(2);
+    pesoController.text = (real / peso).toStringAsFixed(2);
+    
   }
 
   void _dollarChanged(String text) {
@@ -50,6 +57,9 @@ class _HomeState extends State<Home> {
     double dollar = double.parse(text);
     realController.text = (dollar * this.dollar).toStringAsFixed(2);
     euroController.text = (dollar * this.dollar / euro).toStringAsFixed(2);
+    poundController.text = (dollar * this.dollar / pound).toStringAsFixed(2);
+    pesoController.text = (dollar * this.dollar / peso).toStringAsFixed(2);
+
   }
 
   void _euroChanged(String text) {
@@ -60,6 +70,32 @@ class _HomeState extends State<Home> {
     double euro = double.parse(text);
     realController.text = (euro * this.euro).toStringAsFixed(2);
     dollarController.text = (euro * this.euro / dollar).toStringAsFixed(2);
+    poundController.text = (euro * this.euro / pound).toStringAsFixed(2);
+    pesoController.text = (euro * this.euro / peso).toStringAsFixed(2);
+  }
+
+  void _poundChanged(String text){
+    if (text.isEmpty) {
+      _clearAll();
+      return;
+    }
+    double pound = double.parse(text);
+    realController.text = (pound * this.pound).toStringAsFixed(2);
+    dollarController.text = (pound * this.pound / dollar).toStringAsFixed(2);
+    pesoController.text = (pound * this.pound / peso).toStringAsFixed(2);
+    euroController.text = (pound * this.pound / euro).toStringAsFixed(2);
+  }
+
+  void _pesoChanged(String text){
+    if (text.isEmpty) {
+      _clearAll();
+      return;
+    }
+    double peso = double.parse(text);
+    realController.text = (peso * this.peso).toStringAsFixed(2);
+    dollarController.text = (peso * this.peso / dollar).toStringAsFixed(2);
+    poundController.text = (peso * this.peso / pound).toStringAsFixed(2);
+    euroController.text = (peso * this.peso / euro).toStringAsFixed(2);
   }
 
   @override
@@ -92,6 +128,8 @@ class _HomeState extends State<Home> {
               } else {
                 dollar = snapshot.data["results"]["currencies"]["USD"]["buy"];
                 euro = snapshot.data["results"]["currencies"]["EUR"]["buy"];
+                pound = snapshot.data["results"]["currencies"]["GBP"]["buy"];
+                peso = snapshot.data["results"]["currencies"]["ARS"]["buy"];
 
                 return SingleChildScrollView(
                   padding: EdgeInsets.all(15),
@@ -100,13 +138,18 @@ class _HomeState extends State<Home> {
                     children: <Widget>[
                       Icon(Icons.monetization_on,
                           size: 150, color: Colors.amber),
+                      Divider(),
                       buildTextField(
                           "Reais", "R\$ ", realController, _realChanged),
                       Divider(),
                       buildTextField(
                           "Dollars", "US\$ ", dollarController, _dollarChanged),
                       Divider(),
-                      buildTextField("Euros", "€ ", euroController, _euroChanged)
+                      buildTextField("Euros", "€ ", euroController, _euroChanged),
+                      Divider(),
+                      buildTextField("Pound Sterling", "£ ", poundController, _poundChanged),
+                      Divider(),
+                      buildTextField("Argentine Peso", "\$ ", pesoController, _pesoChanged)
                     ],
                   ),
                 );
@@ -120,6 +163,7 @@ class _HomeState extends State<Home> {
 
 Future<Map> getData() async {
   http.Response response = await http.get(request);
+  print(json.decode(response.body));
   return json.decode(response.body);
 }
 

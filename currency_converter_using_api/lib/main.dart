@@ -19,7 +19,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   final realController = TextEditingController();
   final dollarController = TextEditingController();
   final euroController = TextEditingController();
@@ -27,16 +26,40 @@ class _HomeState extends State<Home> {
   double dollar;
   double euro;
 
-  void _realChanged(String text){
-
+  void _clearAll() {
+    realController.text = "";
+    dollarController.text = "";
+    euroController.text = "";
   }
-  
-  void _dollarChanged(String text){
 
+  void _realChanged(String text) {
+    if (text.isEmpty) {
+      _clearAll();
+      return;
+    }
+    double real = double.parse(text);
+    dollarController.text = (real / dollar).toStringAsFixed(2);
+    euroController.text = (real / euro).toStringAsFixed(2);
   }
-  
-  void _euroChanged(String text){
 
+  void _dollarChanged(String text) {
+    if (text.isEmpty) {
+      _clearAll();
+      return;
+    }
+    double dollar = double.parse(text);
+    realController.text = (dollar * this.dollar).toStringAsFixed(2);
+    euroController.text = (dollar * this.dollar / euro).toStringAsFixed(2);
+  }
+
+  void _euroChanged(String text) {
+    if (text.isEmpty) {
+      _clearAll();
+      return;
+    }
+    double euro = double.parse(text);
+    realController.text = (euro * this.euro).toStringAsFixed(2);
+    dollarController.text = (euro * this.euro / dollar).toStringAsFixed(2);
   }
 
   @override
@@ -77,11 +100,13 @@ class _HomeState extends State<Home> {
                     children: <Widget>[
                       Icon(Icons.monetization_on,
                           size: 150, color: Colors.amber),
-                      buildTextField("Reais", "R\$", realController, _realChanged),
+                      buildTextField(
+                          "Reais", "R\$ ", realController, _realChanged),
                       Divider(),
-                      buildTextField("Dollars", "US\$", dollarController, _dollarChanged),
+                      buildTextField(
+                          "Dollars", "US\$ ", dollarController, _dollarChanged),
                       Divider(),
-                      buildTextField("Euros", "€", euroController, _euroChanged)
+                      buildTextField("Euros", "€ ", euroController, _euroChanged)
                     ],
                   ),
                 );
@@ -95,13 +120,14 @@ class _HomeState extends State<Home> {
 
 Future<Map> getData() async {
   http.Response response = await http.get(request);
-  print(json.decode(response.body));
   return json.decode(response.body);
 }
 
-Widget buildTextField(String label, String prefix, TextEditingController controller, Function changeFunction) {
+Widget buildTextField(String label, String prefix,
+    TextEditingController controller, Function changeFunction) {
   return TextField(
     controller: controller,
+    keyboardType: TextInputType.numberWithOptions(decimal: true),
     decoration: InputDecoration(
       labelText: label,
       labelStyle: TextStyle(color: Colors.amber),

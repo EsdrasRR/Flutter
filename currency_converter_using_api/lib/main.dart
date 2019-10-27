@@ -34,6 +34,8 @@ class _HomeState extends State<Home> {
     realController.text = "";
     dollarController.text = "";
     euroController.text = "";
+    pesoController.text = "";
+    poundController.text ="";
   }
 
   void _realChanged(String text) {

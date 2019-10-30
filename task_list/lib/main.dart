@@ -34,21 +34,37 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
-                  decoration: InputDecoration(
-                    labelText: "New Task", 
-                    labelStyle: TextStyle(color: Colors.blueAccent),
+                    decoration: InputDecoration(
+                      labelText: "New Task",
+                      labelStyle: TextStyle(color: Colors.blueAccent),
+                    ),
                   ),
-                ),
                 ),
                 RaisedButton(
                   color: Colors.blueAccent,
                   child: Text("ADD"),
                   textColor: Colors.white,
-                  onPressed: () {   },
+                  onPressed: () {},
                 ),
               ],
             ),
           ),
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.only(top: 10),
+              itemCount: _toDoList.length,
+              itemBuilder: (context, index) {
+                return CheckboxListTile(
+                  title: Text(_toDoList[index]["title"]),
+                  value: _toDoList[index]["ok"],
+                  secondary: CircleAvatar(
+                    child: Icon(
+                        _toDoList[index]["ok"] ? Icons.check : Icons.error),
+                  ),
+                );
+              },
+            ),
+          )
         ],
       ),
     );

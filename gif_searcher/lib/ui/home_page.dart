@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
             'https://developers.giphy.com/static/img/dev-logo-lg.7404c00322a8.gif'),
         centerTitle: true,
       ),
-      backgroundColor: Colors.black, 
+      backgroundColor: Colors.black,
       body: Column(
         children: <Widget>[
           Padding(
@@ -54,15 +54,47 @@ class _HomePageState extends State<HomePage> {
                 labelText: "Search here ",
                 labelStyle: TextStyle(color: Colors.white),
                 border: OutlineInputBorder(),
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white)),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white)),
               ),
               style: TextStyle(color: Colors.white, fontSize: 18),
               textAlign: TextAlign.center,
             ),
           ),
+          Expanded(
+            child: FutureBuilder(
+              future: _getGifs(),
+              builder: (context, snapshot) {
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                  case ConnectionState.none:
+                    return Container(
+                      width: 200,
+                      height: 200,
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        strokeWidth: 5.0,
+                      ),
+                    );
+                  default:
+                    if (snapshot.error) {
+                      return Container();
+                    } else {
+                      _createGifTable(context, snapshot);
+                    }
+                }
+              },
+            ),
+          )
         ],
       ),
     );
+  }
+
+  Widget _createGifTable(BuildContext context, AsyncSnapshot snapshot) {
+    
   }
 }

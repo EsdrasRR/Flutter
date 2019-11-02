@@ -3,6 +3,8 @@ import 'package:contact_schedule/ui/image_source_sheet.dart';
 import 'package:contact_schedule/helpers/contact_helper.dart';
 import 'package:flutter/material.dart';
 
+enum OrderOptions { orderaz, orderza }
+
 class ContactPage extends StatefulWidget {
   final Contact contact;
   ContactPage({this.contact});

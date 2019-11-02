@@ -1,4 +1,5 @@
 import 'package:contact_schedule/helpers/contact_helper.dart';
+import 'package:contact_schedule/ui/contact_page.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
@@ -26,13 +27,15 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Contatos'),
+        title: Text('Contacts'),
         backgroundColor: Colors.deepPurple,
         centerTitle: true,
       ),
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          _showContactPage();
+        },
         child: Icon(Icons.add),
         backgroundColor: Colors.deepPurple,
       ),
@@ -89,6 +92,14 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+      onTap: () {
+        _showContactPage(contact: contacts[index]);
+      },
     );
+  }
+
+  void _showContactPage({Contact contact}) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ContactPage(contact: contact)));
   }
 }

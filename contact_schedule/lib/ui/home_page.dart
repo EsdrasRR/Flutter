@@ -89,7 +89,60 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       onTap: () {
-        _showContactPage(contact: contacts[index]);
+        _showOptions(context, index);
+      },
+    );
+  }
+
+  void _showOptions(BuildContext context, int index) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return BottomSheet(
+          onClosing: () {},
+          builder: (context) {
+            return Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  FlatButton(
+                    child: Text(
+                      'Call',
+                      style: TextStyle(color: Colors.deepPurple, fontSize: 20),
+                    ),
+                    onPressed: () {},
+                  ),
+                  Divider(),
+                  FlatButton(
+                    child: Text(
+                      'Edit',
+                      style: TextStyle(color: Colors.deepPurple, fontSize: 20),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _showContactPage(contact: contacts[index]);
+                    },
+                  ),
+                  Divider(),
+                  FlatButton(
+                    child: Text(
+                      'Delete',
+                      style: TextStyle(color: Colors.deepPurple, fontSize: 20),
+                    ),
+                    onPressed: () {
+                      helper.deleteContact(contacts[index].id);
+                      setState(() {
+                        contacts.removeAt(index);
+                        Navigator.pop(context);
+                      });
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        );
       },
     );
   }
@@ -103,7 +156,7 @@ class _HomePageState extends State<HomePage> {
       } else {
         await helper.saveContact(recContact);
       }
-        _getAllContacts();
+      _getAllContacts();
     }
   }
 

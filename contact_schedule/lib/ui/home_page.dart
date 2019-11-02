@@ -1,6 +1,7 @@
 import 'package:contact_schedule/helpers/contact_helper.dart';
 import 'package:contact_schedule/ui/contact_page.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:io';
 
 class HomePage extends StatefulWidget {
@@ -111,7 +112,10 @@ class _HomePageState extends State<HomePage> {
                       'Call',
                       style: TextStyle(color: Colors.deepPurple, fontSize: 20),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      launch("tel:${contacts[index].phone}");
+                      Navigator.pop(context);
+                    },
                   ),
                   Divider(),
                   FlatButton(

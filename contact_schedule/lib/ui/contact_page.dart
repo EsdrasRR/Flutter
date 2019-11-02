@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:contact_schedule/ui/image_source_sheet.dart';
 import 'package:contact_schedule/helpers/contact_helper.dart';
 import 'package:flutter/material.dart';
 
@@ -60,6 +60,19 @@ class _ContactPageState extends State<ContactPage> {
           child: Column(
             children: <Widget>[
               GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) => ImageSourceSheet(
+                      onImageSelected: (image) {
+                        setState(() {
+                          _editedContact.img = image.path;
+                          Navigator.pop(context);
+                        });
+                      },
+                    ),
+                  );
+                },
                 child: Container(
                   width: 140,
                   height: 140,

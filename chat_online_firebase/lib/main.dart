@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 void main() async {
   runApp(MyApp());
@@ -15,6 +17,25 @@ final ThemeData kDefaultTheme = ThemeData(
     primarySwatch: Colors.deepPurple,
     accentColor: Colors.orangeAccent[400],
     primaryColorBrightness: Brightness.dark);
+
+final googleSignIn = GoogleSignIn();
+final auth = FirebaseAuth.instance;
+
+Future<Null> _ensureLoggedIn() async {
+  GoogleSignInAccount user = googleSignIn.currentUser;
+  if (user == null) {
+    user = await googleSignIn.signInSilently();
+  }
+  if (user == null) {
+    user = await googleSignIn.signIn();
+  }
+  if (await auth.currentUser() == null) {
+    GoogleSignInAuthentication credentials =
+        await googleSignIn.currentUser.authentication;
+    await auth.signInWithCredential(GoogleAuthProvider.getCredential(
+        idToken: credentials.idToken, accessToken: credentials.accessToken));
+  }
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -54,9 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[ChatMessage()],
               ),
             ),
-            Divider(
-              height: 1
-            ),
+            Divider(height: 1),
             Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).cardColor,

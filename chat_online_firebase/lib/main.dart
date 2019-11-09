@@ -29,7 +29,7 @@ final auth = FirebaseAuth.instance;
 
 Future<Null> _ensureLoggedIn() async {
   GoogleSignInAccount user = googleSignIn.currentUser;
-  if (user == null) user = await googleSignIn.signInSilently();
+  //if (user == null) user = await googleSignIn.signInSilently();
   if (user == null) user = await googleSignIn.signIn();
   if (await auth.currentUser() == null) {
     GoogleSignInAuthentication credentials =
